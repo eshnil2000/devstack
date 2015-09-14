@@ -1,0 +1,176 @@
+    1  nano /etc/network/interfaces
+    2  cd devstack/
+    3  ls
+    4  git show |head
+    5  which python
+    6  python -version
+    7  python -v
+    8  clear
+    9  git branch -av
+   10  git checkout stable/juno
+   11  exit
+   12  cd devstack/
+   13  git checkout stable/juno
+   14  ls -als
+   15  nano localrc
+   16  LS -ALS
+   17  ls -als
+   18  source localrc 
+   19  echo $ADMIN_PASSWORD 
+   20  ./stack.sh 
+   21  ./stack.sh FORCE=yes
+   22  nano stack.sh 
+   23  FORCE=yes ./stack.sh 
+   24  nano stackrc 
+   25  FORCE=yes ./stack.sh 
+   26  nano stackrc 
+   27  nano /usr/local/lib/python2.7/dist-packages/
+   28  cd /usr/local/lib/python2.7/dist-packages/
+   29  ls
+   30  cd /home/pi/devstack/
+   31  nano functions-common 
+   32  FORCE=yes ./stack.sh 
+   33  nano functions-common 
+   34  nano ./worlddump-2015-09-07-165626.txt 
+   35  nano functions-common 
+   36  pwd
+   37  exit
+   38  ./stack.sh 
+   39  cd ..
+   40  ls
+   41  exit
+   42  ./stack.sh 
+   43  cd ..
+   44  ls -als
+   45  rm -R devstack/
+   46  cd devstack/
+   47  ls
+   48  cd ..
+   49  rm -R devstack/
+   50  rm -R devstack
+   51  sudo rm devstack/
+   52  sudo rm -R devstack/
+   53  ./stack.sh 
+   54  git branch 
+   55  git branch show all
+   56  git branch -av
+   57  ls
+   58  nano stackrc
+   59  ifconfig
+   60  exit
+   61  cd /home/pi/devstack/
+   62  ls
+   63  nano functions-common 
+   64  ./stack.sh 
+   65  nano functions-common 
+   66  ./stack.sh 
+   67  nano functions-common 
+   68  ./stack.sh 
+   69  sudo ./stack.sh 
+   70  ./stack.sh 
+   71  nano stackrc 
+   72  exit
+   73  nano stack.sh 
+   74  uname -a
+   75  man uname
+   76  cd /home/pi/devstack/
+   77  TOP_DIR=$(cd $(dirname "$0") && pwd)
+   78  echo $TOP_DIR 
+   79  dirname 
+   80  dirname  "$0"
+   81  echo $0
+   82  cd (dirname  "$0")
+   83  cd $(dirname  "$0")
+   84  cd $(dirname "$0") && pwd
+   85  cd files/
+   86  ls
+   87  cd ..
+   88  source functions
+   89  source lib/config 
+   90  GetDistro 
+   91  nano functions
+   92  nano functions-common 
+   93  $DISTRO 
+   94  echo $DISTRO 
+   95  nano functions-common 
+   96  nano functions
+   97  uname -n
+   98  uname -r
+   99  uname -m
+  100  uname -p
+  101  uname -o
+  102  uname --version
+  103  which uname 
+  104  uname 
+  105  which uname 2>/dev/null
+  106  uname uname -s
+  107  uname -s
+  108  uname -v
+  109  uname -r
+  110  os_RELEASE=uname -r
+  111  os_VENDOR=
+  112  echo $os_RELEASE 
+  113  os_RELEASE=${'uname -r'}
+  114  os_RELEASE=${`uname -r`}
+  115  os_RELEASE=$`uname -r`
+  116  echo $os_RELEASE 
+  117  os_UPDATE=${os_RELEASE##*.}
+  118  echo $os_RELEASE 
+  119  echo $os_UPDATE 
+  120  os_UPDATE=${os_RELEASE%.*}
+  121  echo $os_UPDATE 
+  122  ./stack.sh 
+  123  os_VENDOR=`uname`
+  124  os_RELEASE=`uname -r`
+  125  os_UPDATE=${os_RELEASE##*.}
+  126  os_RELEASE=${os_RELEASE%.*}
+  127  os_PACKAGE=""
+  128  os_CODENAME=$os_RELEASE
+  129  ECHO $os_RELEASE 
+  130  echo $os_RELEASE 
+  131  ./stack.sh 
+  132  cd /home/pi/devstack/
+  133  virsh --version
+  134  libvirtd --version
+  135  exit
+  136  sudo tail -f /var/log/apache2/keystone.log & echo $! >/opt/stack/status/stack/key.pid; fg || echo "key failed to start" | tee "/opt/stack/status/stack/key.failure"
+  137  sudo tail -f /var/log/apache2/keystone_access.log & echo $! >/opt/stack/status/stack/key-access.pid; fg || echo "key-access failed to start" | tee "/opt/stack/status/stack/key-access.failure"
+  138  ps -ef |grep 
+  139  ps -ef |grep dev
+  140  cd /home/pi/devstack/
+  141  ls
+  142  rm worlddump-2015-09-13-*
+  143  ls
+  144  nano localrc 
+  145  nano stack.sh 
+  146  nano localrc 
+  147  sudo nano localrc 
+  148  ls -als
+  149  exit
+  150  top
+  151  exit
+  152  pwd
+  153  ./stack.sh 
+  154  rm worlddump-2015-09-13-212212.txt 
+  155  nova-manage  service list
+  156  curl -i -X GET http://10.0.0.15
+  157  restart
+  158  sudo shutdown -r
+  159  exit
+  160  cd devstack/
+  161  ls
+  162  ./stack.sh 
+  163  nano localrc 
+  164  ./stack.sh 
+  165  cd /usr/local/lib/python2.7/dist-packages/virtualenv
+  166  nano localrc 
+  167  nova-manage service list
+  168  nano /home/pi/devstack/local.conf
+  169  nano localrc 
+  170  nano functions-common 
+  171  vim functions-common 
+  172  vim stack.sh 
+  173  ./stack.sh 
+  174  screen -x stack
+  175  nova-manage service list
+  176  history >command.txt

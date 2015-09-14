@@ -92,12 +92,12 @@ GetDistro
 
 # Warn users who aren't on an explicitly supported distro, but allow them to
 # override check and attempt installation with ``FORCE=yes ./stack``
-if [[ ! ${DISTRO} =~ (precise|trusty|7.0|wheezy|sid|testing|jessie|f19|f20|rhel6|rhel7) ]]; then
-    echo "WARNING: this script has not been tested on $DISTRO"
-    if [[ "$FORCE" != "yes" ]]; then
-        die $LINENO "If you wish to run this script anyway run with FORCE=yes"
-    fi
-fi
+#if [[ ! ${DISTRO} =~ (precise|trusty|7.0|wheezy|sid|testing|jessie|f19|f20|rhel6|rhel7) ]]; then
+#    echo "WARNING: this script has not been tested on $DISTRO"
+#    if [[ "$FORCE" != "yes" ]]; then
+#        die $LINENO "If you wish to run this script anyway run with FORCE=yes"
+#    fi
+#fi
 
 
 # Global Settings
@@ -184,7 +184,7 @@ fi
 # --------------
 
 # We're not **root**, make sure ``sudo`` is available
-is_package_installed sudo || install_package sudo
+#is_package_installed sudo || install_package sudo
 
 # UEC images ``/etc/sudoers`` does not have a ``#includedir``, add one
 sudo grep -q "^#includedir.*/etc/sudoers.d" /etc/sudoers ||
@@ -206,7 +206,7 @@ sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
 # -----------------------------
 
 # For debian/ubuntu make apt attempt to retry network ops on it's own
-if is_ubuntu; then
+if is_linux || is_ubuntu; then
     echo 'APT::Acquire::Retries "20";' | sudo tee /etc/apt/apt.conf.d/80retry  >/dev/null
 fi
 
@@ -1415,7 +1415,7 @@ if [[ -x $TOP_DIR/local.sh ]]; then
 fi
 
 # Check the status of running services
-service_check
+#service_check
 
 
 # Fin

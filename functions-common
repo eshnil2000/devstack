@@ -372,7 +372,18 @@ declare os_VENDOR os_RELEASE os_UPDATE os_PACKAGE os_CODENAME
 function GetOSVersion {
 
     # Figure out which vendor we are
-    if [[ -x "`which sw_vers 2>/dev/null`" ]]; then
+    	
+	if [[ -x "`which uname 2>/dev/null`" ]]; then
+        # Raspberry Pi
+        os_VENDOR=`uname`
+        os_RELEASE=`uname`
+        os_UPDATE=${os_RELEASE##*.}
+        os_RELEASE=${os_RELEASE%.*}
+        os_PACKAGE=`uname`
+	os_CODENAME=$os_RELEASE
+
+	
+	elif [[ -x "`which sw_vers 2>/dev/null`" ]]; then
         # OS/X
         os_VENDOR=`sw_vers -productName`
         os_RELEASE=`sw_vers -productVersion`
@@ -392,6 +403,7 @@ function GetOSVersion {
         else
             os_CODENAME=""
         fi
+
     elif [[ -x $(which lsb_release 2>/dev/null) ]]; then
         os_VENDOR=$(lsb_release -i -s)
         os_RELEASE=$(lsb_release -r -s)
@@ -464,7 +476,10 @@ declare DISTRO
 
 function GetDistro {
     GetOSVersion
-    if [[ "$os_VENDOR" =~ (Ubuntu) || "$os_VENDOR" =~ (Debian) ]]; then
+    	if [[ "$os_VENDOR" =~ (Linux) ]]; then
+        # For Fedora, just use 'f' and the release
+        DISTRO="$os_RELEASE"
+	elif [[ "$os_VENDOR" =~ (Ubuntu) || "$os_VENDOR" =~ (Debian) ]]; then
         # 'Everyone' refers to Ubuntu / Debian releases by the code name adjective
         DISTRO=$os_CODENAME
     elif [[ "$os_VENDOR" =~ (Fedora) ]]; then
@@ -541,6 +556,14 @@ function is_ubuntu {
     [ "$os_PACKAGE" = "deb" ]
 }
 
+# Determine if current distribution is an Linux-based Raspberry distribution
+# is_linux
+function is_linux {
+    if [[ -z "$os_PACKAGE" ]]; then
+        GetOSVersion
+    fi
+    [ "$os_PACKAGE" = "Linux" ]
+}
 
 # Git Functions
 # =============
@@ -912,6 +935,8 @@ function _get_package_dir {
         pkg_dir=$FILES/rpms
     elif is_suse; then
         pkg_dir=$FILES/rpms-suse
+    elif is_linux; then
+        pkg_dir=$FILES/apts
     else
         exit_distro_not_supported "list of packages"
     fi
@@ -1067,7 +1092,7 @@ function update_package_repo {
         return 0
     fi
 
-    if is_ubuntu; then
+    if is_linux || is_ubuntu; then
         local xtrace=$(set +o | grep xtrace)
         set +o xtrace
         if [[ "$REPOS_UPDATED" != "True" || "$RETRY_UPDATE" = "True" ]]; then
@@ -1087,7 +1112,9 @@ function real_install_package {
         yum_install "$@"
     elif is_suse; then
         zypper_install "$@"
-    else
+    elif is_linux; then
+	apt_get install "$@"
+	else
         exit_distro_not_supported "installing packages"
     fi
 }
@@ -1122,7 +1149,9 @@ function is_package_installed {
 # Distro-agnostic package uninstaller
 # uninstall_package package [package ...]
 function uninstall_package {
-    if is_ubuntu; then
+    if is_linux || is_ubuntu; then
+        apt_get purge "$@"
+    elif is_ubuntu; then
         apt_get purge "$@"
     elif is_fedora; then
         sudo yum remove -y "$@"
@@ -1982,7 +2011,7 @@ function maskip {
 # Service wrapper to restart services
 # restart_service service-name
 function restart_service {
-    if is_ubuntu; then
+    if is_linux || is_ubuntu; then
         sudo /usr/sbin/service $1 restart
     else
         sudo /sbin/service $1 restart
@@ -2004,7 +2033,7 @@ function safe_chown {
 # Service wrapper to start services
 # start_service service-name
 function start_service {
-    if is_ubuntu; then
+    if is_linux || is_ubuntu; then
         sudo /usr/sbin/service $1 start
     else
         sudo /sbin/service $1 start
@@ -2014,7 +2043,7 @@ function start_service {
 # Service wrapper to stop services
 # stop_service service-name
 function stop_service {
-    if is_ubuntu; then
+    if is_linux || is_ubuntu; then
         sudo /usr/sbin/service $1 stop
     else
         sudo /sbin/service $1 stop

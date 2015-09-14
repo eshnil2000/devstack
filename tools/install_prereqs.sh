@@ -61,10 +61,15 @@ if is_ubuntu && echo $PACKAGES | grep -q dkms ; then
     PACKAGES="$PACKAGES linux-headers-$(uname -r)"
 fi
 
+if is_linux && echo $PACKAGES | grep -q dkms ; then
+    # ensure headers for the running kernel are installed for any DKMS builds
+    PACKAGES="$PACKAGES linux-headers-$(uname -r)"
+fi
+
 install_package $PACKAGES
 
 if [[ -n "$SYSLOG" && "$SYSLOG" != "False" ]]; then
-    if is_ubuntu || is_fedora; then
+    if is_ubuntu || is_fedora || is_linux; then
         install_package rsyslog-relp
     elif is_suse; then
         install_package rsyslog-module-relp
