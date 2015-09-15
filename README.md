@@ -84,6 +84,31 @@ in all the key files listed below, to make sure linux ditribution is treated sam
 #	modified:   stackrc
 #	modified:   tools/install_prereqs.sh
 
+----In case of mysql error----
+1. stop mysql
+
+sudo /etc/init.d/mysql stop
+2. start it again in a special mode which doesn't require permissions
+
+/usr/bin/mysqld_safe --skip-grant-tables &
+3. connect and change the root password
+
+mysql -u root 
+then at the mysql prompt
+change to the mysql system database and change the password
+
+use mysql;
+update user set password = PASSWORD('yourpasswordhere');
+flush privileges;
+
+
+4. stop the server & restart it in normal mode
+
+sudo /etc/init.d/mysqld stop
+sudo /etc/init.d/mysqld restart
+-----
+
+
 DevStack is a set of scripts and utilities to quickly deploy an OpenStack cloud.
 
 # Goals
