@@ -1,3 +1,89 @@
+1. Install libvirtd
+---
+2. Raspberry Pi doesnt have too much RAM, so set up 2G swap space:
+First, you need to create a swap space eg. 2000MB
+dd if=/dev/zero of=/swap bs=1M count=2048
+Format your new swap space:
+# mkswap /swap
+What has left is to enable your new /swap space:
+# swapon /swap
+To make your new swap space enabled permanently even after reboot you need to add a following line to your /etc/fstab file:
+/swap          none  swap sw       0 0
+-----
+
+---disable services that are not required by modifying localrc:
+disable_service tls-proxy
+disable_service s-proxy
+disable_service swift3
+disable_service swift
+disable_service cinder
+disable_service neutron
+disable_service ceilometer
+disable_service heat
+disable_service q-svc
+disable_service neutron q-svc q-agt
+disable_service q-dhcp
+disable_service q-l3
+disable_service q-meta
+disable_service q-lbaas
+disable_service q-fwaas
+disable_service q-vpn
+# Heat
+disable_service heat h-api h-api-cfn h-api-cw h-eng
+# Ceilometer
+disable_service ceilometer-acompute ceilometer-acentral ceilometer-collector ce$
+# Swift
+disable_service s-proxy s-object s-container s-account
+# Disable default enabled services
+disable_service cinder c-sch c-api c-vol
+disable_service tempest
+#Cinder
+disable_service cinder,c-api,c-vol,c-sch,c-bak
+disable_service zaqar-server odl-server odl-compute
+-----
+set devstack ownership to stack
+chowm -R stack:stack devstack/*
+
+Key modifications to make it work on Raspberry Pi:
+In file functions-common
+Modified ==>GetOSVersion
+Added: Allows detection of Linux
+----
+if [[ -x "`which uname 2>/dev/null`" ]]; then
+        # Raspberry Pi
+        os_VENDOR=`uname`
+        os_RELEASE=`uname`
+        os_UPDATE=${os_RELEASE##*.}
+        os_RELEASE=${os_RELEASE%.*}
+        os_PACKAGE=`uname`
+        os_CODENAME=$os_RELEASE
+------
+Added function
+----
+# Determine if current distribution is an Linux-based Raspberry distribution
+# is_linux
+function is_linux {
+    if [[ -z "$os_PACKAGE" ]]; then
+        GetOSVersion
+    fi
+    [ "$os_PACKAGE" = "Linux" ]
+}
+----
+Replaced: is_ubuntu; then 
+with
+if is_linux || is_ubuntu; then
+in all the key files listed below, to make sure linux ditribution is treated same as ubuntu
+
+# modified:   functions-common
+#	modified:   lib/apache
+#	modified:   lib/databases/mysql
+#	modified:   lib/horizon
+#	modified:   lib/keystone
+#	modified:   lib/nova_plugins/functions-libvirt
+#	modified:   stack.sh
+#	modified:   stackrc
+#	modified:   tools/install_prereqs.sh
+
 DevStack is a set of scripts and utilities to quickly deploy an OpenStack cloud.
 
 # Goals
