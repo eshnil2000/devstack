@@ -129,7 +129,7 @@ function cleanup_cinder {
         # If tgt driver isn't running this won't work obviously
         # So check the response and restart if need be
         echo "tgtd seems to be in a bad state, restarting..."
-        if is_ubuntu; then
+        if is_linux || is_ubuntu; then
             restart_service tgt
         else
             restart_service tgtd
